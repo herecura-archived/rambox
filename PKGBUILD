@@ -1,7 +1,7 @@
 #Maintainer: Janek Thomaschewski <janek@jbbr.net>
 
 pkgname=rambox
-pkgver=0.4.4
+pkgver=0.4.5
 pkgrel=1
 pkgdesc='Free and Open Source messaging and emailing app that combines common web applications into one.'
 arch=('i686' 'x86_64')
@@ -11,8 +11,8 @@ license=('MIT')
 source_i686=("https://github.com/saenzramiro/rambox/releases/download/$pkgver/Rambox-$pkgver-ia32.rpm")
 source_x86_64=("https://github.com/saenzramiro/rambox/releases/download/$pkgver/Rambox-$pkgver-x64.rpm")
 
-sha256sums_i686=('0631d53a0ba3e1172efecb8bb22ea29a4c2ef40a690ad921a972efbdd90a5ecf')
-sha256sums_x86_64=('cb3561f6f3650896dbf1603d76125cee057340c1cbe057ca4a68aed3ffd3438e')
+sha256sums_i686=('39d1de98cdbab21861deb17bf5d3ffff42ff7d05f3a2de5d4d2fc0d7f0f39a13')
+sha256sums_x86_64=('e7ac1f1ff58ce69dd7ba0c41f840ed39d533eece719f9eba2f129ede96273ff0')
 
 package() {
     cp -a {opt,usr} "$pkgdir"
