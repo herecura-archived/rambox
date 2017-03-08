@@ -2,7 +2,7 @@
 
 pkgname=rambox
 pkgver=0.5.7
-pkgrel=1
+pkgrel=2
 pkgdesc='Free and Open Source messaging and emailing app that combines common web applications into one.'
 arch=('i686' 'x86_64')
 depends=('alsa-lib' 'desktop-file-utils' 'gconf' 'gtk2' 'libnotify' 'libxtst' 'libxss' 'nss')
@@ -17,5 +17,5 @@ sha512sums_x86_64=('171df0d9571fe5c32e8fcd5e5d71f34fef8434a6836008810162df6f8257
 package() {
     cp -a {opt,usr} "$pkgdir"
     install -dm755 "$pkgdir/usr/bin"
-    ln -sf /opt/Rambox/Rambox "$pkgdir/usr/bin/rambox"
+    ln -sf /opt/Rambox/rambox "$pkgdir/usr/bin/rambox"
 }
