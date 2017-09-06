@@ -1,7 +1,7 @@
 #Maintainer: Janek Thomaschewski <janek@jbbr.net>
 
 pkgname=rambox
-pkgver=0.5.10
+pkgver=0.5.11
 pkgrel=1
 pkgdesc='Free and Open Source messaging and emailing app that combines common web applications into one.'
 arch=('i686' 'x86_64')
@@ -11,8 +11,8 @@ license=('MIT')
 source_i686=("https://github.com/saenzramiro/rambox/releases/download/$pkgver/Rambox-$pkgver-ia32.rpm")
 source_x86_64=("https://github.com/saenzramiro/rambox/releases/download/$pkgver/Rambox-$pkgver-x64.rpm")
 
-sha512sums_i686=('3031a654c20057afc7a419390c8cce0e35dc8a83b435ad49af2261aa0919fbfc756d26d24aec147f7316f57ddd74b5cfbd2a167af93dea5a2c1d611e093ab562')
-sha512sums_x86_64=('47f06f7eefa5387426d6fd85b3a05c6ca5325cbd429997f1da9ea194447542ffe1defc858b12dad32b63c42b47d6cc16f19f957898eb995a213ba005bdb92f1f')
+sha512sums_i686=('64c0ae65047dae654f760caeb4187976b23201177559d5b4c5e72362a0d72860e5c135fc73ed63131f17e884813b103389e467a912d3713f88dd4f4bd6792ad0')
+sha512sums_x86_64=('236cb9d89caed538e64ca3147ed381d08a63cc224c4d1483cd95e83616272fd75d960aeecf5af84d34e4f3658bcb56f13257d8c9c509f774dd934f3adf93375c')
 
 package() {
     cp -a {opt,usr} "$pkgdir"
