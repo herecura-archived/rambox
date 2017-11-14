@@ -1,21 +1,52 @@
-#Maintainer: Janek Thomaschewski <janek@jbbr.net>
+# Maintainer: Philipp A. <flying-sheep@web.de>
 
 pkgname=rambox
 pkgver=0.5.13
-pkgrel=1
+_relver=0.5.13  # for a release tarball containing env.js
+pkgrel=2
 pkgdesc='Free and Open Source messaging and emailing app that combines common web applications into one.'
-arch=('i686' 'x86_64')
-depends=('alsa-lib' 'desktop-file-utils' 'gconf' 'gtk2' 'libnotify' 'libxtst' 'libxss' 'nss')
+arch=('x86_64')
+depends=('electron')
+makedepends=('desktop-file-utils' 'asar' 'ruby' 'npm' 'sencha-cmd-6')
 url='http://rambox.pro/'
-license=('MIT')
-source_i686=("https://github.com/saenzramiro/rambox/releases/download/$pkgver/Rambox-$pkgver-ia32.rpm")
-source_x86_64=("https://github.com/saenzramiro/rambox/releases/download/$pkgver/Rambox-$pkgver-x64.rpm")
+license=('GPL3')
+source=("https://github.com/saenzramiro/$pkgname/archive/$pkgver.tar.gz"
+        "https://github.com/saenzramiro/$pkgname/releases/download/$_relver/Rambox-$_relver-x64.tar.gz"
+        "context-menu.patch::https://github.com/flying-sheep/$pkgname/commit/2109de0825058a3ee9c0a09a603520b8e7c09744.diff"
+        "$pkgname.desktop" "$pkgname.js")
+sha256sums=('7d14d5da8d9c13d6253ad69142ea912c496296600afd4ad6c6bec89b967941f0'
+            'eb506db7e1b412dbdbf9e0ab69686cc10f60e3c7f2e338db5c477e45eb05d198'
+            '3b1c0c47d5d5e46eba7c9a3f92dac18b6378c1f41386602b8f285b506b3c4906'
+            '61ad70a929c402e24c79b8868208310f9b3c4d7801db2b791af38293231ee524'
+            '3b5ed6f04eea66f239b5ae56ea1ff9e47de156cd38bb54ebc46541daba6091b6')
+noextract=("Rambox-$_relver-x64.tar.gz")
 
-sha512sums_i686=('84a650905cae1c2b487d48a6debfb1be66a925fc9dee524528ec4bf2c5f40142981553db670d87c14dceb1943dc3d6e22f417aaf6ef08ea82571356695b54a00')
-sha512sums_x86_64=('57181551a62d4e28921412c2dbd43161a53cc41db86e8b5b6cad2c93ee1b7e5aab15a402fdf25dfbab91fa4e829f7d60d4ab7c8849564bdd76f89eabee5d9deb')
+build() {
+	# retrieve env.js
+	cd "$srcdir"
+	tar xOf "Rambox-$_relver-x64.tar.gz" "Rambox-$_relver/resources/app.asar" >app.asar
+	cd "$pkgname-$pkgver"
+	asar ef ../app.asar env.js
+	
+	# context menu patch
+	patch -p1 -i ../context-menu.patch
+	
+	# install packages
+	sed -Ei 's/\s+"electron": "[^"]+",//' package.json
+	npm install
+	
+	# build
+	npm run sencha:compile
+	sed -i "s/require('electron-is-dev')/false/" 'build/production/Rambox/electron/main.js'
+}
 
 package() {
-    cp -a {opt,usr} "$pkgdir"
-    install -dm755 "$pkgdir/usr/bin"
-    ln -sf /opt/Rambox/rambox "$pkgdir/usr/bin/rambox"
+	cd "$srcdir/$pkgname-$pkgver"
+	
+	install -d "$pkgdir/usr/lib"
+	cp -r 'build/production/Rambox' "$pkgdir/usr/lib/rambox"
+	
+	install -Dm755 "$srcdir/$pkgname.js" "$pkgdir/usr/bin/$pkgname"
+	install -Dm644 'resources/Icon.png' "$pkgdir/usr/share/pixmaps/$pkgname.png"
+	desktop-file-install "$srcdir/$pkgname.desktop" --dir "$pkgdir/usr/share/applications/"
 }
